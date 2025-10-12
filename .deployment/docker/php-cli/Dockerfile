@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-cli-alpine
 
 RUN apk add --no-cache --update curl git build-base zlib-dev oniguruma-dev autoconf linux-headers bash
 RUN docker-php-ext-install sockets
@@ -19,6 +19,9 @@ COPY ./.deployment/docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.in
 # Postgres
 RUN apk add --no-cache libpq-dev \
     && docker-php-ext-install pdo_pgsql
+
+# Other libs
+RUN docker-php-ext-install bcmath
 
 ## Configure non-root user
 ARG PUID
@@ -42,6 +45,4 @@ USER www-data
 # Composer instalation
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-CMD php-fpm
-
-EXPOSE 9000
+CMD ["tail", "-f", "/dev/null"]
