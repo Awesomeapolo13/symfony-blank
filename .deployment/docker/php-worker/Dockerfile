@@ -11,12 +11,13 @@ RUN apk add --no-cache --update \
     bash \
     rabbitmq-c-dev \
     supervisor \
-    py3-setuptools
+    py3-setuptools \
+    rabbitmq-c-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install sockets pcntl
-RUN pecl install amqp \
-    && docker-php-ext-enable amqp
+RUN pecl install amqp
+RUN docker-php-ext-enable amqp
 
 # Install Xdebug conditionally
 ARG INSTALL_XDEBUG=false
